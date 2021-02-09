@@ -1,70 +1,16 @@
 import {useEffect, useState} from 'react'
-
-const Block = (props) => {
-  const blockstyle = {
-    "border": "1px solid black",
-    "width": 75,
-    "height": 75
-  }
-  
-  return (
-    <>
-      <div style={blockstyle} onClick={props.handleClick} >
-        {props.player}
-      </div>
-    </>
-  )
-}
-
-const GameBoard = ({board, handleClick}) => {
-  const container = {
-    "display": "grid",
-    "gridTemplateColumns": "repeat(3, 80px)",
-    "gridTemplateRows": "80px 80px 80px"
-  }
-
-  return (
-    <div style={container}> 
-        {board.map((row, y) => row.map((column, x) => { 
-          let player = ''
-          
-          if (column === 'o') {
-            player = 'o'
-          } else if (column === 'x') {
-            player = 'x'
-          } else {
-            player = ''
-          }
-          
-          return <Block  player={player} handleClick={() => handleClick({y, x})} />
-        
-        })
-          
-          )}
-      </div>
-  )
-}
+import GameBoard from './components/GameBoard'
+import {winningConditions} from './utils/rules'
 
 const App = () => {
   const [turn, setTurn] = useState('x')
-  const [winner, setWinner] = useState()
+  const [winner, setWinner] = useState(null)
   const initialGameBoard = [
     ['', '', ''],
     ['', '', ''],
     ['', '', '']
   ]
-  const winningConditions = [
-    [[0,0],[0,1],[0,2]],
-    [[1,0],[1,1],[2,1]],
-    [[2,0],[2,1],[2,2]],
-
-    [[0,0],[1,0],[2,0]],
-    [[0,1],[1,1],[2,1]],
-    [[0,2],[1,2],[2,2]],
-
-    [[0,0],[1,1],[2,2]],
-    [[0,2],[1,1],[2,0]],
-  ]
+  
   const [board, setBoard] = useState(initialGameBoard)
 
   useEffect(() => {
@@ -90,24 +36,33 @@ const App = () => {
   }, [board])
 
   const handleClick = ({y, x}) => {
+    if (board[y][x] !== '') {
+      return
+    }
+
     //should deep copy gameBoard
     const newBoard = [...board.map(array => array.slice())]
     newBoard[y][x] = turn
-    const helpTurn  = turn === 'x' ? 'o' : 'x'
-    setTurn(helpTurn)
+    const newTurn  = turn === 'x' ? 'o' : 'x'
+
+    setTurn(newTurn)
     setBoard(newBoard)
   }
 
-  
   
   return (
     <div className="App" >
       <h1>Test</h1>
       <strong>Turn {turn}</strong>
-      <GameBoard board={board} handleClick={handleClick}/>
+      {winner === null ?
+        <GameBoard board={board} handleClick={handleClick}/> :
+        <h1>{winner} is the winner</h1>
+      }
+      
       <button onClick={() => {
         setBoard(initialGameBoard)
         setTurn('x')
+        setWinner(null)
         }}>
           reset
       </button>
