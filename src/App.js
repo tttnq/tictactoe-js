@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import GameBoard from './components/GameBoard'
-import {winningConditions} from './utils/rules'
+import checkWinner from './utils/rules'
 import styled from 'styled-components'
 import Button from './components/Button'
 
@@ -15,33 +15,14 @@ const App = () => {
   const [board, setBoard] = useState(initialGameBoard)
 
   useEffect(() => {
-    const checkWinner = () => {
-      for (let i = 0; i < winningConditions.length; i++) {
-        const [columnA, columnB, columnC] = winningConditions[i]
-        const [x1, y1] = columnA
-        const [x2, y2] = columnB
-        const [x3, y3] = columnC
-  
-        if(board[x1][y1] === 'x' && board[x2][y2] === 'x' && board[x3][y3] === 'x') {
-          console.log('x WIN')
-          setWinner('x')
-        } else if (board[x1][y1] === 'o' && board[x2][y2] === 'o' && board[x3][y3] === 'o') {
-          console.log('o WIN')
-          setWinner('o')
-        }
-      }
-    }
-
-    checkWinner()
-
+    setWinner(checkWinner(board))
   }, [board])
 
   const handleClick = ({y, x}) => {
-    if (board[y][x] !== '') {
+    if (board[y][x] !== '' || winner !== null) {
       return
     }
-
-    //should deep copy gameBoard
+    //deep copy gameBoard
     const newBoard = [...board.map(array => array.slice())]
     newBoard[y][x] = turn
     const newTurn  = turn === 'x' ? 'o' : 'x'
@@ -53,13 +34,12 @@ const App = () => {
   return (
     <Container>
       <h1>Tic Tac Toe</h1>
-      <div>Turn<strong> {turn}</strong></div>
-      {winner === null ?
-        <GameBoard board={board} handleClick={handleClick}/> :
-        <h1>{winner} is the winner</h1>
-      }
+      <div>Turn:<strong> {turn}</strong></div>
+      <GameBoard board={board} handleClick={handleClick} /> 
+      {winner !== null ? <h3>{winner} is the winner</h3> : ''}
       
       <Button 
+        label={'reset'}
         setBoard={() => setBoard(initialGameBoard)}
         setTurn={ () => setTurn('x')}
         setWinner={() => setWinner(null)}

@@ -7,13 +7,13 @@ const Button = (props) => {
       props.setTurn()
       props.setWinner()
     }}>
-      reset
+      {props.label}
     </ResetButton>
     )
 }
 
 const ResetButton = styled.button`
-  background-color: red;
+  background-color: darkgrey;
   height: 30px;
   width: 60px;
   margin-top: 2%;

@@ -30,30 +30,27 @@ const GameBoard = ({board, handleClick}) => {
   )
 }
 
-  const BoardContainer = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3, 80px);
-    grid-template-rows: 80px 80px 80px;
-  `;
+const BoardContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  grid-template-rows: 80px 80px 80px;
+`;
 
-  const BlockContainer = styled.div`
-    border: 1px solid black;
-    font-size: large;
-    border-radius: 5%;
-    width: 75px;
-    height: 75px;
-    &:hover  {
-      width: 80px;
-      height: 80px;
-    }
-  `;
+const BlockContainer = styled.div`
+  border: 1px solid black;
+  font-size: large;
+  border-radius: 5%;
+  width: 75px;
+  height: 75px;
+  &:hover  {
+    width: 80px;
+    height: 80px;
+  }
+`;
 
-  const BlockText = styled.div`
-    font-size: 60px;
-    text-align: center;
-    
-  `
+const BlockText = styled.div`
+  font-size: 60px;
+  text-align: center;
+`
 
-
-
-  export default GameBoard
+export default GameBoard
