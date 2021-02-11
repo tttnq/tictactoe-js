@@ -1,6 +1,8 @@
 import {useEffect, useState} from 'react'
 import GameBoard from './components/GameBoard'
 import {winningConditions} from './utils/rules'
+import styled from 'styled-components'
+import Button from './components/Button'
 
 const App = () => {
   const [turn, setTurn] = useState('x')
@@ -10,7 +12,6 @@ const App = () => {
     ['', '', ''],
     ['', '', '']
   ]
-  
   const [board, setBoard] = useState(initialGameBoard)
 
   useEffect(() => {
@@ -49,25 +50,26 @@ const App = () => {
     setBoard(newBoard)
   }
 
-  
   return (
-    <div className="App" >
-      <h1>Test</h1>
-      <strong>Turn {turn}</strong>
+    <Container>
+      <h1>Tic Tac Toe</h1>
+      <div>Turn<strong> {turn}</strong></div>
       {winner === null ?
         <GameBoard board={board} handleClick={handleClick}/> :
         <h1>{winner} is the winner</h1>
       }
       
-      <button onClick={() => {
-        setBoard(initialGameBoard)
-        setTurn('x')
-        setWinner(null)
-        }}>
-          reset
-      </button>
-    </div>
+      <Button 
+        setBoard={() => setBoard(initialGameBoard)}
+        setTurn={ () => setTurn('x')}
+        setWinner={() => setWinner(null)}
+      />
+    </Container>
   );
 }
+
+const Container = styled.div`
+  margin-left: 10%;
+`
 
 export default App;
